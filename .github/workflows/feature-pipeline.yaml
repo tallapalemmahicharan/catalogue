@@ -1,0 +1,24 @@
+name: feature-pipeline
+on: [push]
+permissions:
+  contents: read  # Allows the workflow to read repository contents.
+  statuses: write  # This workflow is allowed to write commit status checks.
+  security-events: read  # This workflow can read security event information.
+jobs: 
+  feature-pipeline:
+    if: github.ref != 'refs/heads/main'
+    uses: tallapalemmahicharan/workflows/.github/workflows/feature-nodejs-pipeline.yaml@main
+    with:
+      project: roboshop
+      component: catalogue
+      environment: dev
+    secrets: inherit
+
+  dev-pipeline:
+    if: github.ref == 'refs/heads/main'
+    uses: tallapalemmahicharan/workflows/.github/workflows/dev-nodejs-pipeline.yaml@main
+    with:
+      project: roboshop
+      component: catalogue
+      environment: dev
+    secrets: inherit
